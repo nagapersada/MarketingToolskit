@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Marketing Toolkit - Tim DVNP</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --dark-bg: #0a0f1a;
+            --card-bg: #161e2d;
+            --text-color: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            height: 100vh;
+            overflow: hidden; /* Mencegah scroll pada slide utama */
+        }
+
+        /* Slide Logic */
+        .slide {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #slide-pembuka {
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #1e293b 0%, #0a0f1a 100%);
+            padding: 30px;
+            text-align: center;
+        }
+
+        #slide-materi {
+            z-index: 1;
+            transform: translateY(100%);
+            overflow-y: auto;
+            background: var(--dark-bg);
+        }
+
+        .active-slide { transform: translateY(0) !important; }
+        .exit-slide { transform: translateY(-100%) !important; }
+
+        /* Slide 1 Content */
+        .logo-img {
+            width: 220px;
+            height: auto;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
+        }
+
+        .motivation { margin-bottom: 40px; }
+        .motivation h1 { color: var(--gold); font-size: 2rem; letter-spacing: 2px; margin-bottom: 10px; }
+        .motivation p { font-style: italic; opacity: 0.8; font-weight: 300; line-height: 1.5; }
+
+        .btn-enter {
+            background: linear-gradient(45deg, var(--gold), #f3cf65);
+            color: #000;
+            padding: 18px 50px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Slide 2 Content */
+        .nav-header {
+            position: sticky;
+            top: 0;
+            background: var(--card-bg);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            z-index: 100;
+        }
+
+        .container { padding: 20px; max-width: 600px; margin: auto; }
+        
+        .section-header {
+            color: var(--gold);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 30px 0 15px;
+            border-left: 3px solid var(--gold);
+            padding-left: 10px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .info b { display: block; font-size: 1rem; margin-bottom: 4px; color: #fff; }
+        .info span { font-size: 0.75rem; color: #94a3b8; word-break: break-all; }
+
+        .btn-group { display: flex; gap: 10px; }
+        .circle-btn {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; color: white; border: none; cursor: pointer;
+        }
+        .btn-blue { background: #0284c7; }
+        .btn-gray { background: #334155; }
+
+        /* Custom Input for Digital Card */
+        .custom-ref {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .custom-ref input {
+            background: transparent; border: 1px solid #475569; color: #fff;
+            padding: 8px; border-radius: 6px; flex: 1; outline: none;
+        }
+
+        /* Landscape Optimization */
+        @media (orientation: landscape) and (max-height: 500px) {
+            #slide-pembuka { flex-direction: row; gap: 50px; }
+            .logo-img { width: 140px; margin-bottom: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="slide-pembuka" class="slide">
+        <img src="logo.png" alt="DVNP Logo" class="logo-img">
+        <div class="motivation">
+            <h1>TEAM DVNP</h1>
+            <p>"Membangun masa depan finansial yang kokoh dengan alat pemasaran terbaik di tangan Anda."</p>
+            <br><br>
+            <button class="btn-enter" onclick="goToMateri()">Masuk Sekarang <i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <div id="slide-materi" class="slide">
+        <div class="nav-header">
+            <span style="font-weight: 700; color: var(--gold);">DVNP TOOLKIT</span>
+            <button onclick="backHome()" style="background:none; border:none; color:white; font-size: 1.5rem;"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div class="container">
+            <div class="section-header">Aplikasi Utama</div>
+            <div id="app-list"></div>
+
+            <div class="card" style="display: block;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="info">
+                        <b>Kartu Nama Digital</b>
+                        <span id="kn-url-text">https://nagapersada.github.io/LandingPage/?ref=deka</span>
+                    </div>
+                    <div class="btn-group">
+                        <a href="https://nagapersada.github.io/LandingPage/?ref=deka" id="kn-link" target="_blank" class="circle-btn btn-gray"><i class="fas fa-external-link-alt"></i></a>
+                        <button onclick="shareDirect('Kartu Nama Digital', document.getElementById('kn-url-text').innerText)" class="circle-btn btn-blue"><i class="fas fa-share-alt"></i></button>
+                    </div>
+                </div>
+                <div class="custom-ref">
+                    <input type="text" id="ref-input" placeholder="Masukkan nama anggota..." oninput="changeRef(this.value)">
+                </div>
+            </div>
+
+            <div class="section-header">Telegram Channels</div>
+            <div id="tele-list"></div>
+            
+            <div style="height: 60px;"></div>
+        </div>
+    </div>
+
+    <script>
+        const appData = [
+            { name: "Form Registrasi & Aktivasi", url: "https://nagapersada.github.io/RegistrasiMember/" },
+            { name: "Buku Wajib Anggota", url: "https://nagapersada.github.io/BukuPeganganAnggota/" },
+            { name: "Cara Registrasi", url: "https://nagapersada.github.io/PendaftaranOPALP/" },
+            { name: "Cara Deposit Saldo", url: "https://nagapersada.github.io/CaraDepositOPALP/" },
+            { name: "Cara OP (Transaksi)", url: "https://nagapersada.github.io/caraOP/" },
+            { name: "Roadmap 90 Hari", url: "https://nagapersada.github.io/ROADMAP90H/" },
+            { name: "Dream Accelerator", url: "https://nagapersada.github.io/DreamAccelerator/" },
+            { name: "Area Member NP", url: "https://nagapersada.github.io/AreaMemberNP/" }
+        ];
+
+        const teleData = [
+            { name: "Group Trading Pemula", url: "https://t.me/+_M3d7ui9k7liNWY0" },
+            { name: "Screenshot OP Anggota Baru", url: "https://t.me/+zsMk5uDrQ_dmMjk9" }
+        ];
+
+        function init() {
+            const appList = document.getElementById('app-list');
+            appList.innerHTML = appData.map(item => `
+                <div class="card">
+                    <div class="info">
+                        <b>${item.name}</b>
+                        <span>${item.url}</span>
+                    </div>
+                    <div class="btn-group">
+                        <a href="${item.url}" target="_blank" class="circle-btn btn-gray"><i class="fas fa-external-link-alt"></i></a>
+                        <button onclick="shareDirect('${item.name}', '${item.url}')" class="circle-btn btn-blue"><i class="fas fa-share-alt"></i></button>
+                    </div>
+                </div>
+            `).join('');
+
+            const teleList = document.getElementById('tele-list');
+            teleList.innerHTML = teleData.map(item => `
+                <div class="card">
+                    <div class="info">
+                        <b>${item.name}</b>
+                        <span>Buka di Telegram</span>
+                    </div>
+                    <div class="btn-group">
+                        <a href="${item.url}" target="_blank" class="circle-btn btn-gray" style="background:#0088cc"><i class="fab fa-telegram-plane"></i></a>
+                        <button onclick="shareDirect('${item.name}', '${item.url}')" class="circle-btn btn-blue"><i class="fas fa-share-alt"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function goToMateri() {
+            document.getElementById('slide-pembuka').classList.add('exit-slide');
+            document.getElementById('slide-materi').classList.add('active-slide');
+        }
+
+        function backHome() {
+            document.getElementById('slide-pembuka').classList.remove('exit-slide');
+            document.getElementById('slide-materi').classList.remove('active-slide');
+        }
+
+        function changeRef(val) {
+            const name = val.trim() || 'deka';
+            const newUrl = `https://nagapersada.github.io/LandingPage/?ref=${name}`;
+            document.getElementById('kn-url-text').innerText = newUrl;
+            document.getElementById('kn-link').href = newUrl;
+        }
+
+        async function shareDirect(title, url) {
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: title, url: url });
+                } catch (err) {}
+            } else {
+                navigator.clipboard.writeText(url);
+                alert("Link disalin!");
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
