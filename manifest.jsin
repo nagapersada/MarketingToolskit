@@ -1,10 +1,11 @@
 {
-  "name": "DVNP Marketing Toolkit",
+  "name": "DVNP Marketing Tools",
   "short_name": "DVNP Tools",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#05070a",
   "theme_color": "#05070a",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "logo.png",
