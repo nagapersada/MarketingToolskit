@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DVNP Toolkit</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#05070a">
+    <link rel="apple-touch-icon" href="logo.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --dark-bg: #05070a;
+            --card-bg: #111827;
+            --text-main: #ffffff;
+            --text-dim: #9ca3af;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        html, body {
+            width: 100%; height: 100%;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            overflow: hidden;
+            position: fixed;
+        }
+
+        /* Slide System */
+        .slide {
+            position: absolute; width: 100%; height: 100%;
+            transition: all 0.6s cubic-bezier(0.85, 0, 0.15, 1);
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            display: flex; flex-direction: column;
+        }
+
+        #slide1 { z-index: 2; background: radial-gradient(circle at top right, #1a2333 0%, #05070a 100%); justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        #slide2 { z-index: 1; transform: translateY(100%); opacity: 0; }
+
+        body.active #slide1 { transform: translateY(-100%); opacity: 0; }
+        body.active #slide2 { transform: translateY(0); opacity: 1; }
+
+        /* Splash Content */
+        .logo-main { width: 65%; max-width: 200px; margin-bottom: 25px; filter: drop-shadow(0 0 20px rgba(212,175,55,0.3)); }
+        .hero-h1 { font-weight: 800; font-size: 2rem; color: var(--gold); margin-bottom: 8px; }
+        .hero-p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 35px; padding: 0 15%; font-style: italic; }
+
+        /* Main Portal Content */
+        .header { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(5,7,10,0.9); backdrop-filter: blur(10px); }
+        .scroll-area { flex: 1; overflow-y: auto; padding: 10px 20px 100px; -webkit-overflow-scrolling: touch; }
+        
+        .section-tag { color: var(--gold); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin: 25px 0 12px; }
+
+        .card {
+            background: var(--card-bg); border-radius: 18px; padding: 15px; margin-bottom: 12px;
+            display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .icon-square { width: 45px; height: 45px; background: rgba(212,175,55,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: var(--gold); }
+        .card-info { flex: 1; overflow: hidden; }
+        .card-info b { display: block; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-info span { font-size: 0.7rem; color: var(--text-dim); }
+
+        .btn-action { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.05); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        /* Input Card */
+        .input-box { margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 10px; display: flex; border: 1px solid rgba(212,175,55,0.2); }
+        .input-box input { background: none; border: none; color: white; flex: 1; font-size: 0.8rem; outline: none; padding-left: 10px; }
+
+        /* Button Utama */
+        .btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #F3CF65 100%); color: #000; padding: 18px 50px; border-radius: 15px; font-weight: 800; border: none; text-transform: uppercase; }
+
+        /* Footer Admin */
+        .admin-footer { position: fixed; bottom: 20px; left: 20px; right: 20px; background: var(--gold); color: #000; padding: 15px; border-radius: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 800; text-decoration: none; box-shadow: 0 10px 20px rgba(0,0,0,0.4); z-index: 100; }
+
+        @media (orientation: landscape) { .logo-main { width: 120px; } #slide1 { flex-direction: row; gap: 40px; } }
+    </style>
+</head>
+<body>
+
+    <div id="slide1" class="slide">
+        <img src="logo.png" class="logo-main" alt="DVNP">
+        <div class="hero">
+            <h1 class="hero-h1">DVNP GROUP</h1>
+            <p class="hero-p">Elevate your trading business with our professional toolkit.</p>
+            <button class="btn-gold" onclick="document.body.classList.add('active')">Mulai <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <div id="slide2" class="slide">
+        <div class="header">
+            <div>
+                <p style="font-size: 0.6rem; color: var(--text-dim);">DASHBOARD</p>
+                <p style="font-weight: 800; color: var(--gold); font-size: 1.1rem;">MARKETING TOOLS</p>
+            </div>
+            <button onclick="document.body.classList.remove('active')" style="background:none; border:none; color:white; font-size: 1.5rem;"><i class="fa-solid fa-circle-xmark"></i></button>
+        </div>
+
+        <div class="scroll-area">
+            <div class="section-tag">Aplikasi Utama</div>
+            <div id="app-list"></div>
+
+            <div class="section-tag">Marketing Personal</div>
+            <div class="card" style="display: block;">
+                <div style="display: flex; align-items: center;" onclick="window.open(document.getElementById('full-kn').value, '_blank')">
+                    <div class="icon-square"><i class="fa-solid fa-address-card"></i></div>
+                    <div class="card-info">
+                        <b>Kartu Nama Digital</b>
+                        <span id="kn-display">.../?ref=deka</span>
+                    </div>
+                    <button class="btn-action" onclick="event.stopPropagation(); share('Kartu Nama', document.getElementById('full-kn').value)"><i class="fa-solid fa-share-nodes"></i></button>
+                </div>
+                <div class="input-box">
+                    <i class="fa-solid fa-user-tag" style="color:var(--gold); font-size: 0.8rem;"></i>
+                    <input type="text" placeholder="Masukkan nama Anda..." oninput="updateKN(this.value)">
+                    <input type="hidden" id="full-kn" value="https://nagapersada.github.io/LandingPage/?ref=deka">
+                </div>
+            </div>
+
+            <div class="section-tag">Telegram Support</div>
+            <div id="tele-list"></div>
+        </div>
+
+        <a href="https://wa.me/628123456789" class="admin-footer" target="_blank">
+            <i class="fa-brands fa-whatsapp fa-lg"></i> HUBUNGI ADMIN TIM DVNP
+        </a>
+    </div>
+
+    <script>
+        const apps = [
+            { n: "Registrasi & Aktivasi", u: "https://nagapersada.github.io/RegistrasiMember/", i: "fa-user-plus" },
+            { n: "Buku Wajib Anggota", u: "https://nagapersada.github.io/BukuPeganganAnggota/", i: "fa-book-open" },
+            { n: "Cara Registrasi", u: "https://nagapersada.github.io/PendaftaranOPALP/", i: "fa-file-signature" },
+            { n: "Cara Deposit Saldo", u: "https://nagapersada.github.io/CaraDepositOPALP/", i: "fa-money-bill-transfer" },
+            { n: "Cara OP (Transaksi)", u: "https://nagapersada.github.io/caraOP/", i: "fa-chart-line" },
+            { n: "Roadmap 90 Hari", u: "https://nagapersada.github.io/ROADMAP90H/", i: "fa-route" },
+            { n: "Dream Accelerator", u: "https://nagapersada.github.io/DreamAccelerator/", i: "fa-gem" },
+            { n: "Area Member NP", u: "https://nagapersada.github.io/AreaMemberNP/", i: "fa-layer-group" }
+        ];
+
+        const teles = [
+            { n: "Group Trading Pemula", u: "https://t.me/+_M3d7ui9k7liNWY0" },
+            { n: "Screenshot OP Baru", u: "https://t.me/+zsMk5uDrQ_dmMjk9" }
+        ];
+
+        function init() {
+            document.getElementById('app-list').innerHTML = apps.map(a => `
+                <div class="card" onclick="window.open('${a.u}', '_blank')">
+                    <div class="icon-square"><i class="fa-solid ${a.i}"></i></div>
+                    <div class="card-info"><b>${a.n}</b><span>Klik untuk buka materi</span></div>
+                    <button class="btn-action" onclick="event.stopPropagation(); share('${a.n}', '${a.u}')"><i class="fa-solid fa-share-nodes"></i></button>
+                </div>
+            `).join('');
+
+            document.getElementById('tele-list').innerHTML = teles.map(t => `
+                <div class="card" onclick="window.open('${t.u}', '_blank')">
+                    <div class="icon-square" style="color:#0088cc"><i class="fa-brands fa-telegram"></i></div>
+                    <div class="card-info"><b>${t.n}</b><span>Join Telegram</span></div>
+                    <button class="btn-action" onclick="event.stopPropagation(); share('${t.n}', '${t.u}')"><i class="fa-solid fa-share-nodes"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function updateKN(v) {
+            const ref = v.trim() || 'deka';
+            const url = `https://nagapersada.github.io/LandingPage/?ref=${ref}`;
+            document.getElementById('kn-display').innerText = `.../?ref=${ref}`;
+            document.getElementById('full-kn').value = url;
+        }
+
+        async function share(t, u) {
+            if (navigator.share) { try { await navigator.share({ title: t, url: u }); } catch(e) {} }
+            else { navigator.clipboard.writeText(u); alert("Link disalin!"); }
+        }
+
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>
