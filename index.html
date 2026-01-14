@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DVNP Toolkit</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#05070a">
+    <link rel="apple-touch-icon" href="logo.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --gold: #D4AF37; --dark: #05070a; --card: #111827; --white: #ffffff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        body, html { 
+            width: 100%; height: 100%; background: var(--dark); color: var(--white); 
+            overflow: hidden; position: fixed;
+        }
+
+        /* Slide Management */
+        .slide { position: absolute; width: 100%; height: 100%; transition: 0.6s cubic-bezier(0.85, 0, 0.15, 1); display: flex; flex-direction: column; }
+        #s1 { z-index: 2; background: radial-gradient(circle at top right, #1a2333 0%, #05070a 100%); justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        #s2 { z-index: 1; transform: translateY(100%); opacity: 0; background: var(--dark); padding-top: env(safe-area-inset-top); }
+        
+        body.active #s1 { transform: translateY(-100%); opacity: 0; }
+        body.active #s2 { transform: translateY(0); opacity: 1; }
+
+        /* UI Elements */
+        .logo { width: 160px; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(212,175,55,0.4)); }
+        .btn-start { background: linear-gradient(135deg, #D4AF37 0%, #F3CF65 100%); color: #000; padding: 18px 50px; border-radius: 15px; font-weight: 800; border: none; text-transform: uppercase; cursor: pointer; }
+        
+        .header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(212,175,55,0.2); }
+        .scroll-area { flex: 1; overflow-y: auto; padding: 15px 20px 120px; -webkit-overflow-scrolling: touch; }
+        
+        .section-title { font-size: 0.7rem; color: var(--gold); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin: 25px 0 12px; }
+        .card { background: var(--card); border-radius: 18px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
+        .icon-box { width: 45px; height: 45px; background: rgba(212,175,55,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: var(--gold); }
+        .info { flex: 1; overflow: hidden; }
+        .info b { display: block; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .info span { font-size: 0.7rem; color: #9ca3af; }
+        
+        .btn-sh { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.05); border: none; color: white; }
+
+        .input-box { margin-top: 10px; display: flex; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.2); align-items: center; }
+        .input-box input { background: none; border: none; color: white; flex: 1; outline: none; font-size: 0.85rem; margin-left: 10px; }
+
+        .admin-link { position: fixed; bottom: 20px; left: 20px; right: 20px; background: var(--gold); color: #000; padding: 16px; border-radius: 15px; text-align: center; font-weight: 800; text-decoration: none; z-index: 100; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+    </style>
+</head>
+<body>
+
+    <div id="s1" class="slide">
+        <img src="logo.png" class="logo" alt="DVNP">
+        <h1 style="color:var(--gold); font-weight:800; font-size:2rem;">DVNP GROUP</h1>
+        <p style="color:#9ca3af; margin:10px 0 35px; font-style:italic;">Marketing Toolkit Premium</p>
+        <button class="btn-start" onclick="document.body.classList.add('active')">Masuk Materi <i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+
+    <div id="s2" class="slide">
+        <div class="header">
+            <b style="color:var(--gold); letter-spacing:1px;">DVNP PORTAL</b>
+            <i class="fa-solid fa-house" onclick="document.body.classList.remove('active')"></i>
+        </div>
+        
+        <div class="scroll-area">
+            <div class="section-title">Aplikasi & Materi</div>
+            <div id="app-list"></div>
+
+            <div class="section-title">Personal Link</div>
+            <div class="card" style="display:block">
+                <div style="display:flex; align-items:center" onclick="window.open(document.getElementById('full-url').value, '_blank')">
+                    <div class="icon-box"><i class="fa-solid fa-id-badge"></i></div>
+                    <div class="info"><b>Kartu Nama Digital</b><span id="disp-url">.../?ref=deka</span></div>
+                    <button class="btn-sh" onclick="event.stopPropagation(); share('Kartu Nama', document.getElementById('full-url').value)"><i class="fa-solid fa-share-nodes"></i></button>
+                </div>
+                <div class="input-box">
+                    <i class="fa-solid fa-user-pen" style="color:var(--gold); font-size:0.8rem"></i>
+                    <input type="text" placeholder="Ganti nama anggota..." oninput="updateRef(this.value)">
+                    <input type="hidden" id="full-url" value="https://nagapersada.github.io/LandingPage/?ref=deka">
+                </div>
+            </div>
+
+            <div class="section-title">Telegram Channels</div>
+            <div id="tele-list"></div>
+        </div>
+
+        <a href="https://wa.me/628123456789" class="admin-link"><i class="fa-brands fa-whatsapp"></i> HUBUNGI ADMIN TIM</a>
+    </div>
+
+    <script>
+        const apps = [
+            { n: "Registrasi & Aktivasi", u: "https://nagapersada.github.io/RegistrasiMember/", i: "fa-user-plus" },
+            { n: "Buku Wajib Anggota", u: "https://nagapersada.github.io/BukuPeganganAnggota/", i: "fa-book" },
+            { n: "Cara Registrasi", u: "https://nagapersada.github.io/PendaftaranOPALP/", i: "fa-list-check" },
+            { n: "Cara Deposit", u: "https://nagapersada.github.io/CaraDepositOPALP/", i: "fa-wallet" },
+            { n: "Cara OP (Transaksi)", u: "https://nagapersada.github.io/caraOP/", i: "fa-chart-line" },
+            { n: "Roadmap 90 Hari", u: "https://nagapersada.github.io/ROADMAP90H/", i: "fa-map-location-dot" },
+            { n: "Dream Accelerator", u: "https://nagapersada.github.io/DreamAccelerator/", i: "fa-rocket" },
+            { n: "Area Member NP", u: "https://nagapersada.github.io/AreaMemberNP/", i: "fa-network-wired" }
+        ];
+
+        const teles = [
+            { n: "Group Trading Pemula", u: "https://t.me/+_M3d7ui9k7liNWY0" },
+            { n: "Screenshot OP Baru", u: "https://t.me/+zsMk5uDrQ_dmMjk9" }
+        ];
+
+        function render() {
+            document.getElementById('app-list').innerHTML = apps.map(a => `
+                <div class="card" onclick="window.open('${a.u}', '_blank')">
+                    <div class="icon-box"><i class="fa-solid ${a.i}"></i></div>
+                    <div class="info"><b>${a.n}</b><span>Buka Aplikasi</span></div>
+                    <button class="btn-sh" onclick="event.stopPropagation(); share('${a.n}','${a.u}')"><i class="fa-solid fa-share-nodes"></i></button>
+                </div>`).join('');
+
+            document.getElementById('tele-list').innerHTML = teles.map(t => `
+                <div class="card" onclick="window.open('${t.u}', '_blank')">
+                    <div class="icon-box" style="color:#0088cc"><i class="fa-brands fa-telegram"></i></div>
+                    <div class="info"><b>${t.n}</b><span>Buka Telegram</span></div>
+                    <button class="btn-sh" onclick="event.stopPropagation(); share('${t.n}','${t.u}')"><i class="fa-solid fa-share-nodes"></i></button>
+                </div>`).join('');
+        }
+
+        function updateRef(v) {
+            const r = v.trim() || 'deka';
+            const full = `https://nagapersada.github.io/LandingPage/?ref=${r}`;
+            document.getElementById('disp-url').innerText = `.../?ref=${r}`;
+            document.getElementById('full-url').value = full;
+        }
+
+        async function share(t, u) {
+            if (navigator.share) { try { await navigator.share({ title: t, url: u }); } catch(e) {} }
+            else { navigator.clipboard.writeText(u); alert("Link disalin!"); }
+        }
+
+        // Pendaftaran Service Worker (PENTING!)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => console.log('SW Registered'));
+            });
+        }
+
+        render();
+    </script>
+</body>
+</html>
