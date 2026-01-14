@@ -1,9 +1,9 @@
-// Service Worker sederhana agar memenuhi syarat instalasi PWA
+const CACHE_NAME = 'dvnp-v1';
+// Kita tetap online, tapi file ini wajib ada agar syarat instalasi terpenuhi
 self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
 self.addEventListener('fetch', (event) => {
-  // Selalu ambil data terbaru dari internet (Online Only sesuai permintaan)
   event.respondWith(fetch(event.request));
 });
